@@ -12,6 +12,10 @@
 start(_StartType, _StartArgs) ->
     case wb_sup:start_link() of
         {ok, Pid} ->
+            %% CRAP
+            wes_db_ets:start([{sup_name,wes_db_ets}]),
+            wes_lock_ets:start(1000),
+            wes_stats_ets:start_link(),
             {ok, Pid};
         Error ->
             Error

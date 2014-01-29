@@ -9,6 +9,7 @@ deps/**
 eunit.coverage.xml
 erl_crash.dump
 .dialyzer.plt
+.erlang
 *~
 **/*~
 **/#*

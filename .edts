@@ -1,0 +1,3 @@
+:name "wb_node"
+:node-sname "wb_node"
+:lib-dirs '("deps")

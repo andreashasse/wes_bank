@@ -14,4 +14,4 @@ check: compile
 	dialyzer --no_native -Wno_undefined_callbacks -Wno_return -r ebin --plt .dialyzer.plt
 
 start:
-	erl -pa deps/*/ebin ebin -eval "app_util:dev_start(wes_bank, permanent)." -name wes_bank@localhost -config priv/development
+	erl -pa deps/*/ebin ebin -eval "app_util:dev_start(wes_bank, permanent)." -name bank@localhost -config priv/development

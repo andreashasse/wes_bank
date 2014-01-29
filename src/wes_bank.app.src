@@ -3,11 +3,12 @@
   {description, ""},
   {vsn, "1"},
   {registered, []},
-  {included_applications, []},
+  {included_applications, [elli]},
   {applications, [
                   kernel,
                   stdlib,
-                  wes
+                  wes,
+                  jiffy
                  ]},
   {mod, { wes_bank_app, []}},
   {env, []}
