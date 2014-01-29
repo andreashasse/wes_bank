@@ -1,0 +1,15 @@
+doc/*.png
+ebin/**
+deps/**
+.DS_Store
+.eunit
+.idea
+*.log*
+*.beam
+eunit.coverage.xml
+erl_crash.dump
+.dialyzer.plt
+*~
+**/*~
+**/#*
+**/.#*
