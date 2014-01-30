@@ -10,7 +10,7 @@
 %%%===================================================================
 
 start(_StartType, _StartArgs) ->
-    case wb_sup:start_link() of
+    case wes_bank_sup:start_link() of
         {ok, Pid} ->
             %% CRAP
             wes_db_ets:start([{sup_name,wes_db_ets}]),

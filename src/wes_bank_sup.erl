@@ -1,4 +1,4 @@
--module(wb_sup).
+-module(wes_bank_sup).
 
 -behaviour(supervisor).
 
