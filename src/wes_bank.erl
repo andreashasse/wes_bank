@@ -29,11 +29,11 @@ transfer(Session, From, To, Amount) when Amount > 0 ->
     ok = wes_channel:command(?CHANNEL, Session, transfer, Payload).
 
 balance(Name) ->
-    wes_channel:read(?CHANNEL, account, Name, balance).
+    wes_channel:read(account, Name, balance).
 
 open_account(Session, Account) ->
-    ok = wes_channel:register_actor(?CHANNEL, Session, account,
-                                    Account, [Account]).
+    ok = wes_channel:ensure_actor(?CHANNEL, Session, account,
+                                  Account, [Account]).
 
 test() ->
     Session = andreas,
