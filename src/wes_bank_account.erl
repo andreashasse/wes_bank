@@ -49,5 +49,6 @@ from_struct({_Key, Value}) ->
     {Props} = jiffy:decode(Value),
     {_, Balance} = lists:keyfind(<<"balance">>, 1, Props),
     {_, Name} = lists:keyfind(<<"name">>, 1, Props),
-    #wb_acc{balance = Balance,
-            name = Name}.
+    error_logger:info_msg("From struct ~p", [Balance]),
+    {ok, #wb_acc{balance = Balance,
+                 name = binary_to_atom(Name, utf8)}}.
