@@ -11,7 +11,7 @@
 -define(CHANNEL, bank_session).
 
 start_session(Session) ->
-    {ok, _} = wes_channel:start(?CHANNEL, Session, []).
+    wes_channel:start(?CHANNEL, Session, []).
 
 stop_session(Session) ->
     wes_channel:stop(?CHANNEL, Session).
@@ -37,17 +37,19 @@ open_account(Session, Account) ->
 
 test() ->
     Session = andreas,
+    Account1 = <<"ac1">>,
+    Account2 = <<"ac2">>,
     start_session(Session),
-    open_account(Session, a1),
-    open_account(Session, a2),
-    error_logger:info_msg("Balance 1 a1 ~p", [balance(a1)]),
-    error_logger:info_msg("Balance 1 a2 ~p", [balance(a2)]),
-    insert(Session, a1, 10),
-    insert(Session, a2, 5),
-    error_logger:info_msg("Balance 2 a1 ~p", [balance(a1)]),
-    error_logger:info_msg("Balance 2 a2 ~p", [balance(a2)]),
-    transfer(Session, a1, a2, 1),
-    error_logger:info_msg("Balance 3 a1 ~p", [balance(a1)]),
-    error_logger:info_msg("Balance 3 a2 ~p", [balance(a2)]),
+    open_account(Session, Account1),
+    open_account(Session, Account2),
+    error_logger:info_msg("Balance 1 Account1 ~p", [balance(Account1)]),
+    error_logger:info_msg("Balance 1 Account2 ~p", [balance(Account2)]),
+    insert(Session, Account1, 10),
+    insert(Session, Account2, 5),
+    error_logger:info_msg("Balance 2 Account1 ~p", [balance(Account1)]),
+    error_logger:info_msg("Balance 2 Account2 ~p", [balance(Account2)]),
+    transfer(Session, Account1, Account2, 1),
+    error_logger:info_msg("Balance 3 Account1 ~p", [balance(Account1)]),
+    error_logger:info_msg("Balance 3 Account2 ~p", [balance(Account2)]),
     stop_session(Session),
     ok.

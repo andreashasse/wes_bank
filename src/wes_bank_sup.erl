@@ -35,7 +35,7 @@ init([]) ->
 
 elli_spec() ->
     Mods =
-        [{wb_elli_handler, []}],
+        [{wes_bank_elli_handler, []}],
     Args =
         [{port, 8080},
          {callback, elli_middleware},

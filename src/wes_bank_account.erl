@@ -40,7 +40,7 @@ command(_, _, _, State) ->
     {ok, State}.
 
 key(Actorname) ->
-    <<"wb_account", (atom_to_binary(Actorname, utf8))/binary>>.
+    <<"wb_account", Actorname/binary>>.
 
 to_struct(_Actorname, #wb_acc{name = Name, balance = Balance}) ->
     jiffy:encode({[{balance, Balance}, {name, Name}]}).
@@ -51,4 +51,4 @@ from_struct({_Key, Value}) ->
     {_, Name} = lists:keyfind(<<"name">>, 1, Props),
     error_logger:info_msg("From struct ~p", [Balance]),
     {ok, #wb_acc{balance = Balance,
-                 name = binary_to_atom(Name, utf8)}}.
+                 name = Name}}.
