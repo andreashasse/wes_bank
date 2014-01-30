@@ -8,29 +8,31 @@
          balance/1,
          test/0]).
 
+-define(CHANNEL, bank_session).
+
 start_session(Session) ->
-    {ok, _} = wes_channel:start(bank_session, Session, []).
+    {ok, _} = wes_channel:start(?CHANNEL, Session, []).
 
 stop_session(Session) ->
-    wes_channel:stop(bank_session, Session).
+    wes_channel:stop(?CHANNEL, Session).
 
 insert(Session, To, Amount) when Amount > 0 ->
     Payload = {To, Amount},
-    ok = wes_channel:command(bank_session, Session, insert, Payload).
+    ok = wes_channel:command(?CHANNEL, Session, insert, Payload).
 
 withdraw(Session, To, Amount) when Amount >  0 ->
     Payload = {To, Amount},
-    ok = wes_channel:command(bank_session, Session, withdraw, Payload).
+    ok = wes_channel:command(?CHANNEL, Session, withdraw, Payload).
 
 transfer(Session, From, To, Amount) when Amount > 0 ->
     Payload = {From, To, Amount},
-    ok = wes_channel:command(bank_session, Session, transfer, Payload).
+    ok = wes_channel:command(?CHANNEL, Session, transfer, Payload).
 
 balance(Name) ->
-    wes_channel:read(bank_session, account, Name, balance).
+    wes_channel:read(?CHANNEL, account, Name, balance).
 
 open_account(Session, Account) ->
-    ok = wes_channel:register_actor(bank_session, Session, account,
+    ok = wes_channel:register_actor(?CHANNEL, Session, account,
                                     Account, [Account]).
 
 test() ->
