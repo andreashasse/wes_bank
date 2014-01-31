@@ -11,11 +11,11 @@ handle(Req, _Args) ->
     case elli_request:get_header(<<"User-Id">>, Req) of
         undefined ->
             error_logger:error_msg("No user id header ~p",
-                                   [elli_request:get_headers(Req)]),
+                                   [elli_request:headers(Req)]),
             throw({400, [], <<"">>});
         Session ->
             try
-                handle(Req#req.method, elli_request:path(Req), Session, Req)
+                dispatch(Req#req.method, elli_request:path(Req), Session, Req)
             catch
                 error:channel_not_started ->
                     error_logger:error_msg("Channel not started ~p", [Session]),
@@ -23,30 +23,30 @@ handle(Req, _Args) ->
             end
     end.
 
-handle('POST', [], Session, _Req) ->
+dispatch('POST', [], Session, _Req) ->
     %% This is some kind of login call.
     wes_bank:start_session(Session),
     {204, [], <<"">>};
-handle('POST', [Account, <<"insert">>], Session, Req) ->
+dispatch('POST', [Account, <<"insert">>], Session, Req) ->
     [Amount] = args([amount], Req),
     wes_bank:open_account(Session, Account),
     ok = wes_bank:insert(Session, Account, Amount),
     {204, [], <<"">>};
-handle('POST', [Account, <<"withdraw">>], Session, Req) ->
+dispatch('POST', [Account, <<"withdraw">>], Session, Req) ->
     [Amount] = args([amount], Req),
     wes_bank:open_account(Session, Account),
     ok = wes_bank:withdraw(Session, Account, Amount),
     {204, [], <<"">>};
-handle('POST', [From, <<"transfer">>], Session, Req) ->
+dispatch('POST', [From, <<"transfer">>], Session, Req) ->
     [To, Amount] = args([to, amount], Req),
     wes_bank:open_account(Session, From),
     wes_bank:open_account(Session, To),
     ok = wes_bank:transfer(Session, From, To, Amount),
     {204, [], <<"">>};
-handle('GET', [Account, <<"balance">>], _Session, _Req) ->
+dispatch('GET', [Account, <<"balance">>], _Session, _Req) ->
     Value = wes_bank:balance(Account),
     {200, [], jiffy:encode({[{balance, Value}]})};
-handle(_, _, _, _) -> ignore.
+dispatch(_, _, _, _) -> ignore.
 
 
 handle_event(request_closed, _Data, _Args) ->
