@@ -40,3 +40,12 @@ Check balance on other account:
     http GET localhost:8080/a2/balance User-Id:user1 -j
 
 ## Overview of modules & architecture.
+
+wes_bank_elli_handler.erl: Exposes a web interface to the application.
+
+wes_bank.erl: Wraps the wes api, creating a nice api for wes_bank_elli_handler.erl
+
+wes_bank_account.erl: The account actor.
+
+wes_bank_app.erl: Normal _app.erl file. After starting the application it signals
+to the db, lock and stats that they should start.
