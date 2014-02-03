@@ -8,7 +8,8 @@
                   kernel,
                   stdlib,
                   wes,
-                  jiffy
+                  jiffy,
+                  lager
                  ]},
   {mod, { wes_bank_app, []}},
   {env, []}
