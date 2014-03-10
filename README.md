@@ -19,9 +19,9 @@ Start the app:
 Use [httpie](https://github.com/jkbr/httpie#installation) to be able to
 copy paste these example commands.
 
-Log in:
+Create account `a1` as `user1`:
 
-    http POST localhost:8080 User-Id:user1 -j
+    http POST localhost:8080/a1 User-Id:user1 -j
 
 Insert money:
 
@@ -31,7 +31,7 @@ Check balance:
 
     http GET localhost:8080/a1/balance User-Id:user1 -j
 
-Transfer money between accounts:
+Transfer money between accounts (`a2` needs to be created):
 
     http POST localhost:8080/a1/transfer User-Id:user1 to=a2 amount:=10 -j
 
