@@ -45,7 +45,8 @@ dispatch('POST', [From, <<"transfer">>], Session, Req) ->
     {204, [], <<"">>};
 dispatch('GET', [Account, <<"balance">>], _Session, _Req) ->
     Value = wes_bank:balance(Account),
-    {200, [], jiffy:encode({[{balance, Value}]})};
+    {200, [{<<"Content-Type">>, <<"application/json">>}],
+     jiffy:encode({[{balance, Value}]})};
 dispatch(_, _, _, _) -> ignore.
 
 
