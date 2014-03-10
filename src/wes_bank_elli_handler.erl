@@ -43,7 +43,8 @@ dispatch('POST', [From, <<"transfer">>], Session, Req) ->
     wes_bank:open_account(Session, To),
     ok = wes_bank:transfer(Session, From, To, Amount),
     {204, [], <<"">>};
-dispatch('GET', [Account, <<"balance">>], _Session, _Req) ->
+dispatch('GET', [Account, <<"balance">>], Session, _Req) ->
+    wes_bank:open_account(Session, Account),
     Value = wes_bank:balance(Account),
     {200, [{<<"Content-Type">>, <<"application/json">>}],
      jiffy:encode({[{balance, Value}]})};
