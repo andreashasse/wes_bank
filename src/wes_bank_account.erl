@@ -7,7 +7,7 @@
          command/4,
          key/1,
          to_struct/2,
-         from_struct/1]).
+         from_struct/2]).
 
 -record(wb_acc,
         {balance = 0,
@@ -45,7 +45,7 @@ key(Actorname) ->
 to_struct(_Actorname, #wb_acc{name = Name, balance = Balance}) ->
     jiffy:encode({[{balance, Balance}, {name, Name}]}).
 
-from_struct({_Key, Value}) ->
+from_struct(_Key, Value) ->
     {Props} = jiffy:decode(Value),
     {_, Balance} = lists:keyfind(<<"balance">>, 1, Props),
     {_, Name} = lists:keyfind(<<"name">>, 1, Props),

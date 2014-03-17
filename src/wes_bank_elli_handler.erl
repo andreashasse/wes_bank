@@ -15,6 +15,7 @@ handle(Req, _Args) ->
             throw({400, [], <<"">>});
         Session ->
             try
+                wes_bank:start_session(Session),
                 dispatch(Req#req.method, elli_request:path(Req), Session, Req)
             catch
                 error:channel_not_started ->
@@ -23,9 +24,9 @@ handle(Req, _Args) ->
             end
     end.
 
-dispatch('POST', [], Session, _Req) ->
-    %% This is some kind of login call.
-    wes_bank:start_session(Session),
+dispatch('POST', [Account], Session, _Req) ->
+    %% This creates a bank account.
+    wes_bank:create_account(Session, Account),
     {204, [], <<"">>};
 dispatch('POST', [Account, <<"insert">>], Session, Req) ->
     [Amount] = args([amount], Req),
@@ -39,13 +40,20 @@ dispatch('POST', [Account, <<"withdraw">>], Session, Req) ->
     {204, [], <<"">>};
 dispatch('POST', [From, <<"transfer">>], Session, Req) ->
     [To, Amount] = args([to, amount], Req),
-    wes_bank:open_account(Session, From),
-    wes_bank:open_account(Session, To),
-    ok = wes_bank:transfer(Session, From, To, Amount),
-    {204, [], <<"">>};
-dispatch('GET', [Account, <<"balance">>], _Session, _Req) ->
+    FromResult = wes_bank:open_account(Session, From),
+    ToResult = wes_bank:open_account(Session, To),
+    case {FromResult, ToResult} of
+        {ok, ok} ->
+            ok = wes_bank:transfer(Session, From, To, Amount),
+            {204, [], <<>>};
+        {_, _} ->
+            {409, [], <<>>}
+    end;
+dispatch('GET', [Account, <<"balance">>], Session, _Req) ->
+    wes_bank:open_account(Session, Account),
     Value = wes_bank:balance(Account),
-    {200, [], jiffy:encode({[{balance, Value}]})};
+    {200, [{<<"Content-Type">>, <<"application/json">>}],
+     jiffy:encode({[{balance, Value}]})};
 dispatch(_, _, _, _) -> ignore.
 
 
