@@ -12,7 +12,7 @@
 
 -define(chan(Session), {bank_session, Session}).
 -define(actor(Account), {account, Account}).
--define(spec(Account, Type), {?actor(Account), [Account], [Type]}).
+-define(spec(Account, Type), {Type, ?actor(Account), [Account]}).
 
 start_session(Session) ->
     {ok, _Ref} = wes:ensure_channel(?chan(Session)).
