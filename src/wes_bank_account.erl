@@ -3,7 +3,7 @@
 -behaviour(wes_actor).
 
 -export([init/1,
-         read/2,
+         command/3,
          command/4,
          key/1,
          to_struct/2,
@@ -16,8 +16,8 @@
 init([Name]) ->
     {ok, #wb_acc{name = Name}}.
 
-read(balance, #wb_acc{balance = B}) ->
-    B.
+command(_, balance, #wb_acc{balance = B} = State) ->
+    {reply, B, State}.
 
 command(_, transfer, [{Name, _To, Amount}],
         #wb_acc{name = Name, balance = AccAmount})
